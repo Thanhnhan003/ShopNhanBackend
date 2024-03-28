@@ -1,0 +1,6 @@
+@ShopNhanBackend_HostAddress = http://localhost:5216
+
+GET {{ShopNhanBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
