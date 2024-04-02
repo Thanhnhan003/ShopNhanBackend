@@ -177,9 +177,8 @@ namespace ShopNhanBackend.Migrations
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NameProduct = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -218,6 +217,30 @@ namespace ShopNhanBackend.Migrations
                         principalTable: "products",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    cartId = table.Column<int>(type: "int", nullable: true),
+                    TotalPrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CartItemId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_orders_cartItems_CartItemId",
+                        column: x => x.CartItemId,
+                        principalTable: "cartItems",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -270,6 +293,11 @@ namespace ShopNhanBackend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_orders_CartItemId",
+                table: "orders",
+                column: "CartItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_products_CategoryId",
                 table: "products",
                 column: "CategoryId");
@@ -294,10 +322,13 @@ namespace ShopNhanBackend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "cartItems");
+                name: "orders");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "cartItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

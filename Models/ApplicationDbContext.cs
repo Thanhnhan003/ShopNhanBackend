@@ -13,6 +13,8 @@ namespace ShopNhanBackend.Models
         public DbSet<Products> products { get; set; }
         public DbSet<Categorys> categorys { get; set; }
         public DbSet<CartItem> cartItems { get; set; }
+        public DbSet<Orders> orders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +28,11 @@ namespace ShopNhanBackend.Models
                .HasOne(p => p.ProductCartId)
                .WithMany()
                .HasForeignKey(p => p.ProductId);
+            builder.Entity<Orders>()
+              .HasOne(p => p.CartItem)
+              .WithMany()
+              .HasForeignKey(p => p.cartId);
+
         }
     }
 }

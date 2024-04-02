@@ -200,6 +200,42 @@ namespace ShopNhanBackend.Migrations
                     b.ToTable("categorys");
                 });
 
+            modelBuilder.Entity("ShopNhanBackend.Data.Orders", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CartItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalPrice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("cartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartItemId");
+
+                    b.ToTable("orders");
+                });
+
             modelBuilder.Entity("ShopNhanBackend.Data.Products", b =>
                 {
                     b.Property<Guid>("ID")
@@ -209,7 +245,7 @@ namespace ShopNhanBackend.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageFile")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("IsActive")
@@ -219,9 +255,6 @@ namespace ShopNhanBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Price")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Quantity")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -365,6 +398,15 @@ namespace ShopNhanBackend.Migrations
                     b.Navigation("ProductCartId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShopNhanBackend.Data.Orders", b =>
+                {
+                    b.HasOne("ShopNhanBackend.Data.CartItem", "CartItem")
+                        .WithMany()
+                        .HasForeignKey("CartItemId");
+
+                    b.Navigation("CartItem");
                 });
 
             modelBuilder.Entity("ShopNhanBackend.Data.Products", b =>

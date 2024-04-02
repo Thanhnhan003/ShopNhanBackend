@@ -53,14 +53,17 @@ namespace ShopNhanBackend.Controllers
 
         // PUT: api/Category/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Categorys category)
+        public async Task<IActionResult> PutCategory(int id, Categorys categoryDTO)
         {
-            if (id != category.ID)
+            var category = await _context.categorys.FindAsync(id);
+            if (category == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
+            // Cập nhật các thuộc tính của category từ DTO
+            category.NameCategory = categoryDTO.NameCategory;
+            category.IsActive = categoryDTO.IsActive;
 
             try
             {
@@ -80,6 +83,8 @@ namespace ShopNhanBackend.Controllers
 
             return NoContent();
         }
+
+
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
